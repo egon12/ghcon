@@ -13,11 +13,9 @@ let's try it.
 Just commit this file and try to create new branch from this commit. And then
 try to add some comment, and delete this line below
 
-"Hello this is supposed to be different with below"
-
-==============================================================================
-
 "Hello this is supposed to be different than below"
+
+"And yes, it is different than above, But don't know what happened."
 
 Ok, I think that's enough, to play around with github commit, trial and error
 

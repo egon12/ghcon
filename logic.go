@@ -2,7 +2,7 @@ package main
 
 type ReviewProcess interface {
 	// StartReview id should be pullRequestNumber, or pullRequest with message
-	StartReview(hash string) error
+	StartReview(Commit) error
 	AddComment(comment, path string, linenumber int) error
 	FinishReview() error
 	CancelReview() error
@@ -16,8 +16,10 @@ type ReviewState interface {
 }
 
 type Commit interface {
+	GetRepo() string
 	GetHash() string
 	IsPR() bool
 	GetPRNumber() int
+	GetPRID() string
 	Error() error
 }

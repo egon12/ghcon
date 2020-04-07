@@ -10,10 +10,16 @@ import (
 )
 
 type commit struct {
+	repo      string
 	hash      string
 	err       error
 	isPR      bool
 	prNumbers []int
+	prID      []string
+}
+
+func (c *commit) GetRepo() string {
+	return c.repo
 }
 
 func (c *commit) GetHash() string {
@@ -33,6 +39,13 @@ func (c *commit) GetPRNumber() int {
 		return c.prNumbers[0]
 	}
 	return 0
+}
+
+func (c *commit) GetPRID() string {
+	if len(c.prID) > 0 {
+		return c.prID[0]
+	}
+	return ""
 }
 
 type commitSource struct {
@@ -68,12 +81,13 @@ func (c *commitSource) GetCommit(hash string) Commit {
 }
 
 func (c *commitSource) GetCommitFromRepo(repo, hash string) Commit {
-	result := commit{hash: hash}
+	result := commit{repo: repo, hash: hash}
 
 	var query struct {
 		Search struct {
 			Nodes []struct {
 				PullRequest struct {
+					ID     string
 					Number int
 				} `graphql:"... on PullRequest"`
 			}
@@ -94,9 +108,11 @@ func (c *commitSource) GetCommitFromRepo(repo, hash string) Commit {
 
 	result.isPR = prLength > 0
 	result.prNumbers = make([]int, prLength)
+	result.prID = make([]string, prLength)
 
 	for i, pr := range query.Search.Nodes {
 		result.prNumbers[i] = pr.PullRequest.Number
+		result.prID[i] = pr.PullRequest.ID
 	}
 
 	return &result

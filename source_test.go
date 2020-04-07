@@ -61,4 +61,8 @@ func TestGetCommitFromRepo(t *testing.T) {
 	if c.GetPRID() != "MDExOlB1bGxSZXF1ZXN0Mzg4NzQzODg5" {
 		t.Error("PR ID is different")
 	}
+
+	if c.GetBaseRefName() != "master" {
+		t.Error("BaseRefName is different")
+	}
 }

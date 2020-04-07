@@ -21,5 +21,6 @@ type Commit interface {
 	IsPR() bool
 	GetPRNumber() int
 	GetPRID() string
+	GetBaseRefName() string
 	Error() error
 }

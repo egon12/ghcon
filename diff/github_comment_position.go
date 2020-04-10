@@ -38,5 +38,5 @@ func (g *GithubCommentPosition) Find(lineNumber int, isNew bool) (int, error) {
 		return 0, err
 	}
 
-	return ln - g.startHunk, nil
+	return ln - g.startHunk + 1, nil
 }

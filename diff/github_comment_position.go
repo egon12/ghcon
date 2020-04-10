@@ -10,9 +10,15 @@ type GithubCommentPosition struct {
 // CreateGithubCommentPostion it's input are the diffContent that can be get from
 // git diff master...HEAD -- filename
 // it will return error if the content are empty or not diff cotent
-func NewGithubCommentPosition(diffContent []byte) (*GithubCommentPosition, error) {
+func NewGithubCommentPosition(commit Commit, path string) (*GithubCommentPosition, error) {
+	gdp := &gitDiffProducer{}
+	diffContent, err := gdp.Produce(commit, path)
+	if err != nil {
+		return nil, err
+	}
+
 	dlf := NewLineFinder()
-	err := dlf.Parse(diffContent)
+	err = dlf.Parse(diffContent)
 	if err != nil {
 		return nil, err
 	}

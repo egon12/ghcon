@@ -43,7 +43,10 @@ func main() {
 	r := review.NewProcess(clientV4)
 	r.Start(c)
 
-	r.AddComment(filePath, line, comment)
+	err = r.AddComment(filePath, line, comment)
+	if err != nil {
+		fmt.Fprint(os.Stdout, err)
+	}
 
 }
 

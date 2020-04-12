@@ -75,3 +75,14 @@ func TestLineFinder_ParseFailed(t *testing.T) {
 		t.Error("Expect Error")
 	}
 }
+
+func TestLineFinder_Find_New_FirstLine(t *testing.T) {
+	got, err := dlf.Find(1, true)
+	if err != nil {
+		t.Errorf("Unexpected Error %v", err)
+	}
+
+	if got != 7 {
+		t.Errorf("Want 7 got %d", got)
+	}
+}

@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+const maxIteration = 100000
+
 // LineFinder interface for find linenumber in diff
 type LineFinder interface {
 	// Parse the diff content
@@ -107,16 +109,24 @@ func (d *lineFinder) Find(n int, new bool) (int, error) {
 
 func (d *lineFinder) countLineDiff(lnInFile, lnDiff, lnFileCount int, new bool) int {
 	var addRune byte = '-'
+	var negRune byte = '+'
 	if new {
 		addRune = '+'
+		negRune = '-'
 	}
 
-	for lnInFile != lnFileCount {
-		switch d.content[lnDiff][0] {
+	for lnDiff < len(d.content) {
+		firstChar := d.content[lnDiff][0]
+		if lnInFile == lnFileCount && firstChar != negRune {
+			break
+		}
+
+		switch firstChar {
 		case ' ', addRune:
 			lnFileCount++
 		}
 		lnDiff++
+
 	}
 
 	return lnDiff
@@ -131,7 +141,7 @@ func (d *lineFinder) findHunk(linenumber int, new bool) (hunk, error) {
 
 func (d *lineFinder) findHunkInNew(linenumber int) (hunk, error) {
 	for _, h := range d.hunks {
-		if h.newStart < linenumber && linenumber < h.newStart+h.newLine {
+		if h.newStart <= linenumber && linenumber < h.newStart+h.newLine {
 			return h, nil
 		}
 	}
@@ -140,7 +150,7 @@ func (d *lineFinder) findHunkInNew(linenumber int) (hunk, error) {
 
 func (d *lineFinder) findHunkInOri(linenumber int) (hunk, error) {
 	for _, h := range d.hunks {
-		if h.oriStart < linenumber && linenumber < h.oriStart+h.oriLine {
+		if h.oriStart <= linenumber && linenumber < h.oriStart+h.oriLine {
 			return h, nil
 		}
 	}

@@ -26,6 +26,37 @@ func main() {
 		return
 	}
 
+	addComment()
+}
+
+func start() {
+	cs := getCommitSource()
+	r := getReviewProcess()
+
+	c := cs.GetCurrentCommit()
+
+	err := r.Start(c)
+	if err != nil {
+		fmt.Fprint(os.Stdout, err)
+		os.Exit(1)
+	}
+}
+
+func finish() {
+	start()
+	comment := os.Args[2]
+	r := getReviewProcess()
+	r.Finish(comment)
+}
+
+func cancel() {
+	start()
+	r := getReviewProcess()
+	r.Cancel()
+}
+
+func addComment() {
+	start()
 	comment := os.Args[2]
 
 	filePath, line, err := path.ParseFileAndLine(os.Args[1])
@@ -33,47 +64,38 @@ func main() {
 		fmt.Println(err)
 	}
 
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv(GithubToken)})
-	tc := oauth2.NewClient(oauth2.NoContext, ts)
-	clientV4 := githubv4.NewClient(tc)
-
-	cs := commit.NewSource(clientV4)
-	c := cs.GetCurrentCommit()
-
-	r := review.NewProcess(clientV4)
-	r.Start(c)
-
+	r := getReviewProcess()
 	err = r.AddComment(filePath, line, comment)
 	if err != nil {
 		fmt.Fprint(os.Stdout, err)
 	}
-
 }
 
-func finish() {
-	comment := os.Args[2]
+var clientV4 *githubv4.Client
 
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv(GithubToken)})
-	tc := oauth2.NewClient(oauth2.NoContext, ts)
-	clientV4 := githubv4.NewClient(tc)
-
-	cs := commit.NewSource(clientV4)
-	c := cs.GetCurrentCommit()
-
-	r := review.NewProcess(clientV4)
-	r.Start(c)
-	r.Finish(comment)
+func getClient() *githubv4.Client {
+	if clientV4 == nil {
+		githubToken := os.Getenv(GithubToken)
+		if githubToken == "" {
+			fmt.Fprintf(os.Stdout, "Please set GITHUB_TOKEN environment variable")
+			os.Exit(1)
+		}
+		ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: githubToken})
+		tc := oauth2.NewClient(oauth2.NoContext, ts)
+		clientV4 = githubv4.NewClient(tc)
+	}
+	return clientV4
 }
 
-func cancel() {
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv(GithubToken)})
-	tc := oauth2.NewClient(oauth2.NoContext, ts)
-	clientV4 := githubv4.NewClient(tc)
+func getCommitSource() *commit.Source {
+	return commit.NewSource(getClient())
+}
 
-	cs := commit.NewSource(clientV4)
-	c := cs.GetCurrentCommit()
+var reviewProcess review.Process
 
-	r := review.NewProcess(clientV4)
-	r.Start(c)
-	r.Cancel()
+func getReviewProcess() review.Process {
+	if reviewProcess == nil {
+		reviewProcess = review.NewProcess(getClient())
+	}
+	return reviewProcess
 }

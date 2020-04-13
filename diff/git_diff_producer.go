@@ -13,7 +13,7 @@ type Commit interface {
 type gitDiffProducer struct{}
 
 func (g *gitDiffProducer) Produce(commit Commit, path string) ([]byte, error) {
-	branches := fmt.Sprintf("%s..%s", commit.GetHash(), commit.GetBaseRefName())
+	branches := fmt.Sprintf("%s..%s", commit.GetBaseRefName(), commit.GetHash())
 	cmd := exec.Command("git", "diff", branches, "--", path)
 	return cmd.Output()
 }

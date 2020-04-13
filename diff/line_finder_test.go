@@ -32,42 +32,6 @@ func TestLineFinder_StartHunk(t *testing.T) {
 	}
 }
 
-func TestLineFinder_Find_New(t *testing.T) {
-	got, err := dlf.Find(19, true)
-	if err != nil {
-		t.Errorf("Unexpected Error %v", err)
-	}
-
-	if got != 22 {
-		t.Errorf("Want 22 got %d", got)
-	}
-}
-
-func TestLineFinder_Find_Ori(t *testing.T) {
-	got, err := dlf.Find(16, false)
-	if err != nil {
-		t.Errorf("Unexpected Error %v", err)
-	}
-
-	if got != 16 {
-		t.Errorf("Want 16 got %d", got)
-	}
-}
-
-func TestLineFinder_Find_New_Failed(t *testing.T) {
-	_, err := dlf.Find(6, true)
-	if err == nil {
-		t.Errorf("Expect Error")
-	}
-}
-
-func TestLineFinder_Find_Ori_Failed(t *testing.T) {
-	_, err := dlf.Find(5, false)
-	if err == nil {
-		t.Errorf("Unexpected Error %v", err)
-	}
-}
-
 func TestLineFinder_ParseFailed(t *testing.T) {
 	newLf := NewLineFinder()
 	err := newLf.Parse([]byte("something for nothing"))
@@ -76,13 +40,32 @@ func TestLineFinder_ParseFailed(t *testing.T) {
 	}
 }
 
-func TestLineFinder_Find_New_FirstLine(t *testing.T) {
-	got, err := dlf.Find(1, true)
-	if err != nil {
-		t.Errorf("Unexpected Error %v", err)
+func TestLineFinder_Find(t *testing.T) {
+	tests := []struct {
+		name      string
+		inputLine int
+		inputNew  bool
+		wantLine  int
+		wantErr   bool
+	}{
+		{"Success in new firt line", 1, true, 7, false},
+		{"Success in new second line", 2, true, 8, false},
+		{"Success in Ori", 16, false, 16, false},
+		{"Success in new 3 second hunk", 19, true, 22, false},
+		{"Failed in new", 6, true, 0, true},
+		{"Failed in ori", 5, false, 0, true},
 	}
 
-	if got != 7 {
-		t.Errorf("Want 7 got %d", got)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := dlf.Find(tt.inputLine, tt.inputNew)
+			if tt.wantErr == (err == nil) {
+				t.Errorf("Unexpected Error %v", err)
+			}
+
+			if got != tt.wantLine {
+				t.Errorf("Want %d got %d", tt.wantLine, got)
+			}
+		})
 	}
 }

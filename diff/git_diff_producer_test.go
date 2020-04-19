@@ -17,9 +17,28 @@ func TestGitDiffProducer_Produce(t *testing.T) {
 
 	}
 
-	if len(b) != 896 {
+	if len(b) != 845 {
 		t.Errorf("Maybe diff is not same as thediff.diff len %d", len(b))
 	}
+}
+
+func TestGitDiffProducer_ListFile(t *testing.T) {
+	gdp := &gitDiffProducer{}
+
+	ls, err := gdp.ListFiles(
+		commit{
+			hash:    "exp/second_try",
+			baseref: "master",
+		},
+	)
+	if err != nil {
+		t.Errorf("Unexpected Error: %v", err)
+	}
+
+	if ls[0] != "ForDiff.md" {
+		t.Errorf("Want first item ForDiff.md got %v", ls)
+	}
+
 }
 
 type commit struct {

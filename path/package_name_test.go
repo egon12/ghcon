@@ -8,9 +8,9 @@ func TestGetFullPackageName(t *testing.T) {
 		inputPath string
 		want      string
 	}{
-		{"Simple", "package_name.go", "github.com/egon12/ghcon/path"},
-		{"Parent", "../", "github.com/egon12/ghcon"},
-		{"Neighbor", "../review/interface.go", "github.com/egon12/ghcon/review"},
+		{"Simple", "package_name.go", "github.com/egon12/ghr/path"},
+		{"Parent", "../", "github.com/egon12/ghr"},
+		{"Neighbor", "../review/interface.go", "github.com/egon12/ghr/review"},
 	}
 
 	for _, tt := range tests {

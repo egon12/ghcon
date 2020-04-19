@@ -14,16 +14,16 @@ const (
 )
 
 func TestGetGithubRepo(t *testing.T) {
-	origin := "origin\tgit@github.com:egon12/ghcon (fetch)\norigin\tgit@github.com:egon12/ghcon (push)"
+	origin := "origin\tgit@github.com:egon12/ghr (fetch)\norigin\tgit@github.com:egon12/ghr (push)"
 
 	got := getGithubRepoFromOrigin(origin)
-	if "egon12/ghcon" != got {
-		t.Errorf("Want egon12/ghcon got %s", got)
+	if "egon12/ghr" != got {
+		t.Errorf("Want egon12/ghr got %s", got)
 	}
 }
 
 func TestGetCommitFromRepo(t *testing.T) {
-	repo := "egon12/ghcon"
+	repo := "egon12/ghr"
 	hash := "cfa9a97b93a300785746b692f6a0de4e7b18aa70"
 
 	_ = godotenv.Load("../.env")

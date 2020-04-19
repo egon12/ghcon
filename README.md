@@ -1,2 +1,2 @@
-# ghcon
-Git Hub Connector, with everything else
+# ghr
+Git Hub Reviewer, with everything else

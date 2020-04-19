@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/egon12/ghcon/commit"
+	"github.com/egon12/ghr/commit"
 	"github.com/joho/godotenv"
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"

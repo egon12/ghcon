@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/egon12/ghcon/commit"
-	"github.com/egon12/ghcon/path"
-	"github.com/egon12/ghcon/review"
+	"github.com/egon12/ghr/commit"
+	"github.com/egon12/ghr/path"
+	"github.com/egon12/ghr/review"
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
 )

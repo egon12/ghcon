@@ -1,4 +1,6 @@
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
+github.com/egon12/ghcon v0.0.0-20200419100236-46a862ffc2f3 h1:XsUZv+AYCZiCV4l7s1+9gGTq9RUBNgq/X7gOgmpkbO0=
+github.com/egon12/ghcon v0.0.0-20200419100236-46a862ffc2f3/go.mod h1:oERWlg2mL2oyAy7GR2IkV5fWG5mj6cyjfpKMFeUD+Ks=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/google/go-github v17.0.0+incompatible h1:N0LgJ1j65A7kfXrZnUDaYCs/Sf4rEjNlfyDHW9dolSY=

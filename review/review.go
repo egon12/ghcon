@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/egon12/ghcon/diff"
+	"github.com/egon12/ghr/diff"
 	"github.com/google/go-github/v31/github"
 	"github.com/shurcooL/githubv4"
 )

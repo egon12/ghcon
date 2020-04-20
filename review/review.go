@@ -11,8 +11,8 @@ import (
 	"github.com/shurcooL/githubv4"
 )
 
-func NewProcess(clientV4 *githubv4.Client) Process {
-	return &process{clientV4: clientV4}
+func NewProcess(clientV4 *githubv4.Client, clientV3 *github.Client) Process {
+	return &process{clientV4: clientV4, clientV3: clientV3}
 }
 
 type process struct {

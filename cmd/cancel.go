@@ -31,8 +31,7 @@ var cancelCmd = &cobra.Command{
 		_ = viper.Unmarshal(&cfg)
 
 		a := app.InitApp(cfg)
-		c := a.CommitSource.GetCurrentCommit()
-		a.ReviewProcess.Start(c)
+
 		a.ReviewProcess.Cancel()
 	},
 }

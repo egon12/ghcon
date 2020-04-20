@@ -18,8 +18,10 @@ var set = wire.NewSet(
 	githubv4.NewClient,
 	github.NewClient,
 	review.NewProcess,
+	review.NewProcessFacade,
 	commit.NewSource,
-	wire.Struct(new(App), "ReviewProcess", "CommitSource"),
+	wire.Bind(new(review.CommitSource), new(*commit.Source)),
+	wire.Struct(new(App), "ReviewProcess"),
 )
 
 type GithubToken string

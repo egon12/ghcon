@@ -22,9 +22,9 @@ func InitApp(config Config) *App {
 	githubClient := github.NewClient(client)
 	process := review.NewProcess(githubv4Client, githubClient)
 	source := commit.NewSource(githubv4Client)
+	processFacade := review.NewProcessFacade(process, source)
 	app := &App{
-		ReviewProcess: process,
-		CommitSource:  source,
+		ReviewProcess: processFacade,
 	}
 	return app
 }

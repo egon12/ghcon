@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/diff"
 	"github.com/google/go-github/v31/github"
 	"github.com/shurcooL/githubv4"
@@ -18,11 +19,11 @@ func NewProcess(clientV4 *githubv4.Client, clientV3 *github.Client) Process {
 type process struct {
 	clientV4            *githubv4.Client
 	clientV3            *github.Client
-	commit              Commit
+	commit              commit.Commit
 	pullRequestReviewID string
 }
 
-func (r *process) Start(commit Commit) error {
+func (r *process) Start(commit commit.Commit) error {
 	r.commit = commit
 	ok, err := r.continueReview(commit)
 	if err != nil {
@@ -34,7 +35,7 @@ func (r *process) Start(commit Commit) error {
 	return nil
 }
 
-func (r *process) continueReview(commit Commit) (bool, error) {
+func (r *process) continueReview(commit commit.Commit) (bool, error) {
 	var query struct {
 		Repository struct {
 			PullRequest struct {
@@ -65,7 +66,7 @@ func (r *process) continueReview(commit Commit) (bool, error) {
 	return ok, err
 }
 
-func (r *process) startReview(commit Commit) error {
+func (r *process) startReview(commit commit.Commit) error {
 	var mutation struct {
 		AddPullRequestReview struct {
 			PullRequestReview struct {
@@ -214,6 +215,52 @@ func (r *process) Cancel() error {
 	if err == nil && mutation.DeletePullRequestReview.ClientMutationID != mutationID {
 		return fmt.Errorf("Got different mutationID want %s got %s", mutationID, mutation.DeletePullRequestReview.ClientMutationID)
 	}
+
+	return err
+}
+
+func (r *process) Approve(finalComment string) error {
+	var mutation struct {
+		SubmitPullRequestReview struct {
+			ClientMutationID string
+		} `graphql:"submitPullRequestReview(input: $input)"`
+	}
+
+	var body *githubv4.String
+	if finalComment != "" {
+		body = githubv4.NewString(githubv4.String(finalComment))
+	}
+
+	input := githubv4.SubmitPullRequestReviewInput{
+		PullRequestReviewID: githubv4.NewID(r.pullRequestReviewID),
+		Event:               githubv4.PullRequestReviewEventApprove,
+		Body:                body,
+	}
+
+	err := r.clientV4.Mutate(context.TODO(), &mutation, input, nil)
+
+	return err
+}
+
+func (r *process) RequestChanges(finalComment string) error {
+	var mutation struct {
+		SubmitPullRequestReview struct {
+			ClientMutationID string
+		} `graphql:"submitPullRequestReview(input: $input)"`
+	}
+
+	var body *githubv4.String
+	if finalComment != "" {
+		body = githubv4.NewString(githubv4.String(finalComment))
+	}
+
+	input := githubv4.SubmitPullRequestReviewInput{
+		PullRequestReviewID: githubv4.NewID(r.pullRequestReviewID),
+		Event:               githubv4.PullRequestReviewEventRequestChanges,
+		Body:                body,
+	}
+
+	err := r.clientV4.Mutate(context.TODO(), &mutation, input, nil)
 
 	return err
 }

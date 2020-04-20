@@ -26,9 +26,11 @@ import (
 
 // commentCmd represents the comment command
 var commentCmd = &cobra.Command{
-	Use:   "comment",
-	Short: "A brief description of your command",
-	Long:  ``,
+	Use:     "comment",
+	Short:   "A brief description of your command",
+	Long:    ``,
+	Example: "  ghr comment ForDiff.md:22 \"Delete this line\"",
+	Args:    cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		filePath, line, err := path.ParseFileAndLine(args[0])
 		if err != nil {
@@ -40,9 +42,7 @@ var commentCmd = &cobra.Command{
 		_ = viper.Unmarshal(&cfg)
 
 		a := app.InitApp(cfg)
-		c := a.CommitSource.GetCurrentCommit()
-		a.ReviewProcess.Start(c)
-		a.ReviewProcess.AddComment(filePath, line, args[1])
+		a.ReviewProcess.Comment(filePath, line, args[1])
 	},
 }
 

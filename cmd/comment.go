@@ -32,18 +32,42 @@ var commentCmd = &cobra.Command{
 	Example: "  ghr comment ForDiff.md:22 \"Delete this line\"",
 	Args:    cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		filePath, line, err := path.ParseFileAndLine(args[0])
-		if err != nil {
-			fmt.Println(err)
-			return
+		sf := path.GetSourceFormatType(args[0])
+		switch sf {
+		case path.FileAndLineNumber:
+			reviewComment(args)
+		case path.FileAndRangeLine:
+			reviewMultiLineComment(args)
+
 		}
 
-		cfg := app.Config{}
-		_ = viper.Unmarshal(&cfg)
-
-		a := app.InitApp(cfg)
-		a.ReviewProcess.Comment(filePath, line, args[1])
 	},
+}
+
+func reviewMultiLineComment(args []string) {
+	filePath, from, to, err := path.ParseFileAndRangeLine(args[0])
+	if err != nil {
+		fmt.Printf("%#v", err)
+	}
+
+	cfg := app.Config{}
+	_ = viper.Unmarshal(&cfg)
+
+	a := app.InitApp(cfg)
+	a.ReviewProcess.MultilineComment(filePath, from, to, args[1])
+}
+
+func reviewComment(args []string) {
+	filePath, line, err := path.ParseFileAndLine(args[0])
+	if err != nil {
+		fmt.Printf("%#v", err)
+	}
+
+	cfg := app.Config{}
+	_ = viper.Unmarshal(&cfg)
+
+	a := app.InitApp(cfg)
+	a.ReviewProcess.Comment(filePath, line, args[1])
 }
 
 func init() {

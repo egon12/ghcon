@@ -22,6 +22,26 @@ func TestGitDiffProducer_Produce(t *testing.T) {
 	}
 }
 
+func TestGitDiffProducer_Produce_WithHash(t *testing.T) {
+	gdp := &gitDiffProducer{}
+
+	b, err := gdp.Produce(
+		commit{
+			hash:    "153fd9ad59cabd382177019616a14e01abd09a10",
+			baseref: "master",
+		},
+		"../ForDiff.md",
+	)
+	if err != nil {
+		t.Errorf("Unexpected Error: %v", err)
+
+	}
+
+	if len(b) != 845 {
+		t.Errorf("Maybe diff is not same as thediff.diff len %d", len(b))
+	}
+}
+
 func TestGitDiffProducer_ListFile(t *testing.T) {
 	gdp := &gitDiffProducer{}
 

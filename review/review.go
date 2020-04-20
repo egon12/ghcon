@@ -3,8 +3,6 @@ package review
 import (
 	"context"
 	"fmt"
-	"strconv"
-	"strings"
 
 	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/diff"
@@ -13,12 +11,11 @@ import (
 )
 
 func NewProcess(clientV4 *githubv4.Client, clientV3 *github.Client) Process {
-	return &process{clientV4: clientV4, clientV3: clientV3}
+	return &process{clientV4: clientV4}
 }
 
 type process struct {
 	clientV4            *githubv4.Client
-	clientV3            *github.Client
 	commit              commit.Commit
 	pullRequestReviewID string
 }
@@ -117,59 +114,6 @@ func (r *process) AddComment(path string, line int, comment string) error {
 	}
 
 	err = r.clientV4.Mutate(context.TODO(), &mutation, input, nil)
-
-	return err
-}
-
-func (r *process) AddMultilineComment(path string, fromLineNumber, toLineNumber int, comment string) error {
-	var (
-		pullRequestReviewID int64
-		err                 error
-	)
-
-	pullRequestReviewID, err = strconv.ParseInt(r.pullRequestReviewID, 10, 64)
-	if err != nil {
-		return fmt.Errorf("Cannot get PullRequestReviewID: %v", err)
-	}
-
-	side := "right"
-
-	commitHash := r.commit.GetHash()
-
-	ghcp, err := diff.NewGithubCommentPosition(r.commit, path)
-	if err != nil {
-		return err
-	}
-
-	startLine, err := ghcp.Find(fromLineNumber, true)
-	if err != nil {
-		return err
-	}
-
-	line, err := ghcp.Find(toLineNumber, true)
-	if err != nil {
-		return err
-	}
-
-	pullRequestComment := github.PullRequestComment{
-		Body:                &comment,
-		Path:                &path,
-		PullRequestReviewID: &pullRequestReviewID,
-		StartLine:           &startLine,
-		Line:                &line,
-		Side:                &side,
-		CommitID:            &commitHash,
-	}
-
-	repo := strings.Split(r.commit.GetRepo(), "/")
-
-	_, _, err = r.clientV3.PullRequests.CreateComment(
-		context.Background(),
-		repo[0], // owner
-		repo[1], // name
-		r.commit.GetPRNumber(),
-		&pullRequestComment,
-	)
 
 	return err
 }

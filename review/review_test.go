@@ -1,10 +1,12 @@
 package review
 
 import (
+	"net/http"
 	"os"
 	"testing"
 
 	"github.com/egon12/ghr/commit"
+	"github.com/google/go-github/v31/github"
 	"github.com/joho/godotenv"
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
@@ -15,10 +17,17 @@ const (
 )
 
 func getClient() *githubv4.Client {
+	return githubv4.NewClient(getHttpClient())
+}
+
+func getClientV3() *github.Client {
+	return github.NewClient(getHttpClient())
+}
+
+func getHttpClient() *http.Client {
 	_ = godotenv.Load("../.env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv(GithubToken)})
-	tc := oauth2.NewClient(oauth2.NoContext, ts)
-	return githubv4.NewClient(tc)
+	return oauth2.NewClient(oauth2.NoContext, ts)
 }
 
 func TestReviewProcess_StartAddCommentFinish(t *testing.T) {
@@ -61,19 +70,6 @@ func TestReviewProcess_StartReview(t *testing.T) {
 }
 
 func TestReviewProcess_AddComment(t *testing.T) {
-	t.Skip()
-	r := &process{
-		clientV4:            getClient(),
-		pullRequestReviewID: "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3Mzg5NDE4MTA5",
-	}
-
-	err := r.AddComment("main.go", 14, "Try to comment at GithubToken main.go:14")
-	if err != nil {
-		t.Error(err)
-	}
-}
-
-func TestReviewProcess_AddMultilineComment(t *testing.T) {
 	t.Skip()
 	r := &process{
 		clientV4:            getClient(),

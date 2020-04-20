@@ -47,9 +47,8 @@ func (r *process) continueReview(commit Commit) (bool, error) {
 		} `graphql:"repository(name: $name, owner: $owner)"`
 	}
 
-	repoArr := strings.Split(commit.GetRepo(), "/")
-	owner := repoArr[0]
-	name := repoArr[1]
+	owner := commit.GetOwner()
+	name := commit.GetRepoName()
 
 	err := r.clientV4.Query(context.TODO(), &query, map[string]interface{}{
 		"name":      githubv4.String(name),

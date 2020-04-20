@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 	"regexp"
+	"strings"
 
 	"github.com/shurcooL/githubv4"
 )
@@ -21,6 +22,19 @@ type commit struct {
 
 func (c *commit) GetRepo() string {
 	return c.repo
+}
+
+func (c *commit) GetOwner() string {
+	ownerAndRepo := strings.Split(c.repo, "/")
+	return ownerAndRepo[0]
+}
+
+func (c *commit) GetRepoName() string {
+	ownerAndRepo := strings.Split(c.repo, "/")
+	if len(ownerAndRepo) < 2 {
+		return ""
+	}
+	return ownerAndRepo[1]
 }
 
 func (c *commit) GetHash() string {

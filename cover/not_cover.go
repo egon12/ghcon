@@ -3,6 +3,7 @@ package cover
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -13,6 +14,7 @@ type Range struct {
 
 type NotInCoverage interface {
 	GetFile() string
+	GetAbsPath() string
 	GetRange() Range
 }
 
@@ -23,6 +25,10 @@ type notInCoverage struct {
 
 func (n *notInCoverage) GetFile() string {
 	return n.file
+}
+
+func (n *notInCoverage) GetAbsPath() string {
+	return os.Getenv("GOPATH") + "/src/" + n.file
 }
 
 func (n *notInCoverage) GetRange() Range {

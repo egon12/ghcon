@@ -11,7 +11,7 @@ type GithubCommentPosition struct {
 // git diff master...HEAD -- filename
 // it will return error if the content are empty or not diff cotent
 func NewGithubCommentPosition(commit Commit, path string) (*GithubCommentPosition, error) {
-	gdp := &gitDiffProducer{}
+	gdp := &GitDiffProducer{}
 	diffContent, err := gdp.Produce(commit, path)
 	if err != nil {
 		return nil, err

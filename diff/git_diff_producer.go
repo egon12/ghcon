@@ -11,15 +11,15 @@ type Commit interface {
 	GetBaseRefName() string
 }
 
-type gitDiffProducer struct{}
+type GitDiffProducer struct{}
 
-func (g *gitDiffProducer) Produce(commit Commit, path string) ([]byte, error) {
+func (g *GitDiffProducer) Produce(commit Commit, path string) ([]byte, error) {
 	branches := g.getBranches(commit)
 	cmd := exec.Command("git", "diff", branches, "--", path)
 	return cmd.Output()
 }
 
-func (g *gitDiffProducer) ListFiles(commit Commit) ([]string, error) {
+func (g *GitDiffProducer) ListFiles(commit Commit) ([]string, error) {
 	branches := g.getBranches(commit)
 	cmd := exec.Command("git", "diff", "--stat", branches)
 	b, err := cmd.Output()
@@ -36,6 +36,6 @@ func (g *gitDiffProducer) ListFiles(commit Commit) ([]string, error) {
 	return result, err
 }
 
-func (g *gitDiffProducer) getBranches(commit Commit) string {
+func (g *GitDiffProducer) getBranches(commit Commit) string {
 	return fmt.Sprintf("%s...%s", commit.GetBaseRefName(), commit.GetHash())
 }

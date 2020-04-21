@@ -1,0 +1,3 @@
+package coverreview
+
+func Test() {}

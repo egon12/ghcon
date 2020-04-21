@@ -3,7 +3,7 @@ package diff
 import "testing"
 
 func TestGitDiffProducer_Produce(t *testing.T) {
-	gdp := &gitDiffProducer{}
+	gdp := &GitDiffProducer{}
 
 	b, err := gdp.Produce(
 		commit{
@@ -23,7 +23,7 @@ func TestGitDiffProducer_Produce(t *testing.T) {
 }
 
 func TestGitDiffProducer_Produce_WithHash(t *testing.T) {
-	gdp := &gitDiffProducer{}
+	gdp := &GitDiffProducer{}
 
 	b, err := gdp.Produce(
 		commit{
@@ -43,7 +43,7 @@ func TestGitDiffProducer_Produce_WithHash(t *testing.T) {
 }
 
 func TestGitDiffProducer_ListFile(t *testing.T) {
-	gdp := &gitDiffProducer{}
+	gdp := &GitDiffProducer{}
 
 	ls, err := gdp.ListFiles(
 		commit{

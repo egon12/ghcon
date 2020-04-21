@@ -12,10 +12,11 @@ type processFacade struct {
 	source             CommitSource
 }
 
-func NewProcessFacade(p Process, c CommitSource) ProcessFacade {
+func NewProcessFacade(p Process, m MultilineCommenter, c CommitSource) ProcessFacade {
 	return &processFacade{
-		process: p,
-		source:  c,
+		process:            p,
+		multilineCommenter: m,
+		source:             c,
 	}
 }
 

@@ -6,11 +6,11 @@ import (
 
 	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/diff"
-	"github.com/google/go-github/v31/github"
+	"github.com/egon12/ghr/path"
 	"github.com/shurcooL/githubv4"
 )
 
-func NewProcess(clientV4 *githubv4.Client, clientV3 *github.Client) Process {
+func NewProcess(clientV4 *githubv4.Client) Process {
 	return &process{clientV4: clientV4}
 }
 
@@ -86,8 +86,13 @@ func (r *process) startReview(commit commit.Commit) error {
 	return err
 }
 
-func (r *process) AddComment(path string, line int, comment string) error {
-	ghcp, err := diff.NewGithubCommentPosition(r.commit, path)
+func (r *process) AddComment(filePath string, line int, comment string) error {
+	gitFilePath, err := path.GitPath(filePath)
+	if err != nil {
+		return fmt.Errorf("Get GitPath error %v", err)
+	}
+
+	ghcp, err := diff.NewGithubCommentPosition(r.commit, filePath)
 	if err != nil {
 		return err
 	}
@@ -108,7 +113,7 @@ func (r *process) AddComment(path string, line int, comment string) error {
 	input := githubv4.AddPullRequestReviewCommentInput{
 		PullRequestReviewID: githubv4.NewID(r.pullRequestReviewID),
 		Body:                githubv4.String(comment),
-		Path:                githubv4.NewString(githubv4.String(path)),
+		Path:                githubv4.NewString(githubv4.String(gitFilePath)),
 		Position:            githubv4.NewInt(githubv4.Int(position)),
 		CommitOID:           githubv4.NewGitObjectID(commitOID),
 	}

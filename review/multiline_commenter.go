@@ -2,8 +2,10 @@ package review
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/egon12/ghr/commit"
+	"github.com/egon12/ghr/path"
 	"github.com/google/go-github/v31/github"
 )
 
@@ -21,21 +23,26 @@ func (r *multilineCommenter) Start(commit commit.Commit) error {
 	return nil
 }
 
-func (r *multilineCommenter) AddComment(path string, fromLineNumber, toLineNumber int, comment string) error {
+func (r *multilineCommenter) AddComment(filePath string, fromLineNumber, toLineNumber int, comment string) error {
 	side := "RIGHT"
 
 	commitHash := r.commit.GetHash()
 
+	gitFilePath, err := path.GitPath(filePath)
+	if err != nil {
+		return fmt.Errorf("Get GitPath error %v", err)
+	}
+
 	pullRequestComment := github.PullRequestComment{
 		Body:      &comment,
-		Path:      &path,
+		Path:      &gitFilePath,
 		StartLine: &fromLineNumber,
 		Line:      &toLineNumber,
 		Side:      &side,
 		CommitID:  &commitHash,
 	}
 
-	_, _, err := r.clientV3.PullRequests.CreateComment(
+	_, _, err = r.clientV3.PullRequests.CreateComment(
 		context.Background(),
 		r.commit.GetOwner(),
 		r.commit.GetRepoName(),

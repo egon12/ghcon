@@ -19,10 +19,11 @@ func InitApp(config Config) *App {
 	tokenSource := ProvideOauthTokenSource(githubToken)
 	client := ProvideOauthClient(tokenSource)
 	githubv4Client := githubv4.NewClient(client)
+	process := review.NewProcess(githubv4Client)
 	githubClient := github.NewClient(client)
-	process := review.NewProcess(githubv4Client, githubClient)
+	multilineCommenter := review.NewMultilineCommenter(githubClient)
 	source := commit.NewSource(githubv4Client)
-	processFacade := review.NewProcessFacade(process, source)
+	processFacade := review.NewProcessFacade(process, multilineCommenter, source)
 	app := &App{
 		ReviewProcess: processFacade,
 	}

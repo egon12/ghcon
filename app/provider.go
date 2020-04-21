@@ -18,6 +18,7 @@ var set = wire.NewSet(
 	githubv4.NewClient,
 	github.NewClient,
 	review.NewProcess,
+	review.NewMultilineCommenter,
 	review.NewProcessFacade,
 	commit.NewSource,
 	wire.Bind(new(review.CommitSource), new(*commit.Source)),

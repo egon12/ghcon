@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Egon Firman <egon.firman@gmail.com>
+Copyright © 2020 NAME HERE <EMAIL ADDRESS>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,32 +21,30 @@ import (
 	"github.com/spf13/viper"
 )
 
-// commentCmd represents the comment command
-var commentCmd = &cobra.Command{
-	Use:     "comment [file and path] [comment]",
-	Short:   "Add comment when you review",
-	Long:    "",
-	Example: "  ghr comment ForDiff.md:22 \"Delete this line\"",
-	Args:    cobra.ExactArgs(2),
+// finishCmd represents the finish command
+var finishCmd = &cobra.Command{
+	Use:   "finish ",
+	Short: "Finish review without approve or reject it",
+	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := app.Config{}
 		_ = viper.Unmarshal(&cfg)
 
 		a := app.InitApp(cfg)
-		a.ReviewProcess.Comment(args[0], args[1])
+		a.ReviewProcess.Finish(args[0])
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(commentCmd)
+	rootCmd.AddCommand(finishCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// commentCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// finishCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// commentCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// finishCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

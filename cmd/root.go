@@ -17,8 +17,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -30,8 +31,10 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "ghr",
 	Short: "Tool to do some github review",
-	Long: `ghr are tools that can be use to help you to 
-create review and comment in gihub`,
+	Long: `ghr 
+	
+Tools to create review/comment Gihtub
+`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },

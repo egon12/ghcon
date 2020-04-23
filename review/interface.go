@@ -21,8 +21,7 @@ type CommitSource interface {
 }
 
 type ProcessFacade interface {
-	Comment(path string, lineNumber int, comment string) error
-	MultilineComment(path string, fromLineNumber, toLineNumber int, comment string) error
+	Comment(pathAndLineNumber, comment string) error
 	Cancel() error
 	Finish(string) error
 	Approve(string) error

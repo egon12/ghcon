@@ -26,7 +26,7 @@ var rejectCmd = &cobra.Command{
 	Use:   "reject messages",
 	Short: "Request changes in the commit",
 	Long:  "",
-	Args:  cobra.ExactArgs(2),
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := app.Config{}
 		_ = viper.Unmarshal(&cfg)

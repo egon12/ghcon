@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/shurcooL/githubv4"
+	"github.com/shurcooL/githubv45"
 )
 
 type commit struct {

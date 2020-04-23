@@ -1,0 +1,20 @@
+diff/line_finder.go:10:7: const `maxIteration` is unused (unused)
+review/review_test.go:19:6: func `getClient` is unused (unused)
+review/review_test.go:28:6: func `getHttpClient` is unused (unused)
+review/review_test.go:23:6: func `getClientV3` is unused (unused)
+app/provider.go:14:5: var `set` is unused (unused)
+app/provider.go:37:3: SA1019: oauth2.NoContext is deprecated: Use context.Background() or context.TODO() instead.  (staticcheck)
+		oauth2.NoContext,
+		^
+commit/source_test.go:31:25: SA1019: oauth2.NoContext is deprecated: Use context.Background() or context.TODO() instead.  (staticcheck)
+	tc := oauth2.NewClient(oauth2.NoContext, ts)
+	                       ^
+coverreview/coverreview.go:56:28: Error return value of `c.multilineCommenter.Start` is not checked (errcheck)
+	c.multilineCommenter.Start(commit)
+	                          ^
+review/review_test.go:32:26: SA1019: oauth2.NoContext is deprecated: Use context.Background() or context.TODO() instead.  (staticcheck)
+	return oauth2.NewClient(oauth2.NoContext, ts)
+	                        ^
+testresult/consume.go:77:21: S1010: should omit second index in slice, s[a:len(s)] is identical to s[a:] (gosimple)
+		panic(string(oc[i:len(oc)]))
+		                  ^

@@ -1,0 +1,3 @@
+app/provider.go:37:3: SA1019: oauth2.NoContext is deprecated: Use context.Background() or context.TODO() instead.  (staticcheck)
+		oauth2.NoContext,
+		^

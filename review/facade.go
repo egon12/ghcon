@@ -105,7 +105,7 @@ func (p *processFacade) RequestChanges(lastComment string) error {
 		return err
 	}
 
-	return p.process.Finish(lastComment)
+	return p.process.RequestChanges(lastComment)
 }
 
 func (p *processFacade) start() error {

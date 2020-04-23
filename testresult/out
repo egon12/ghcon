@@ -1,0 +1,9 @@
+ok  	github.com/egon12/ghr/commit	(cached)
+ok  	github.com/egon12/ghr/cover	(cached)
+FAIL	github.com/egon12/ghr/coverreview [build failed]
+ok  	github.com/egon12/ghr/diff	(cached)
+--- FAIL: TestGitPath (0.00s)
+    git_path_test.go:12: Got path/git_path.go
+FAIL
+FAIL	github.com/egon12/ghr/path	0.002s
+FAIL	github.com/egon12/ghr/review [build failed]

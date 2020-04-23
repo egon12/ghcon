@@ -8,7 +8,7 @@ func TestGitPath(t *testing.T) {
 		t.Errorf("Unexpected Error %v", err)
 	}
 
-	if gitPath != "path/git_path.go" {
+	if gitPath != "path/git_path1.go" {
 		t.Errorf("Got %s", gitPath)
 	}
 }

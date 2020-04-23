@@ -16,6 +16,8 @@ limitations under the License.
 package cmd
 
 import (
+	"os"
+
 	"github.com/egon12/ghr/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -32,7 +34,10 @@ var rejectCmd = &cobra.Command{
 		_ = viper.Unmarshal(&cfg)
 
 		a := app.InitApp(cfg)
-		a.ReviewProcess.RequestChanges(args[0])
+		err := a.ReviewProcess.RequestChanges(args[0])
+		if err != nil {
+			os.Stderr.Write([]byte(err.Error()))
+		}
 	},
 }
 

@@ -16,6 +16,8 @@ limitations under the License.
 package cmd
 
 import (
+	"os"
+
 	"github.com/egon12/ghr/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -32,7 +34,10 @@ var cancelCmd = &cobra.Command{
 
 		a := app.InitApp(cfg)
 
-		a.ReviewProcess.Cancel()
+		err := a.ReviewProcess.Cancel()
+		if err != nil {
+			os.Stderr.Write([]byte(err.Error()))
+		}
 	},
 }
 

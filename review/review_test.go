@@ -21,10 +21,12 @@ func getClient() *githubv4.Client {
 }
 
 func getClientV3() *github.Client {
+
 	return github.NewClient(getHttpClient())
 }
 
 func getHttpClient() *http.Client {
+
 	_ = godotenv.Load("../.env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv(GithubToken)})
 	return oauth2.NewClient(oauth2.NoContext, ts)

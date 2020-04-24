@@ -16,6 +16,8 @@ limitations under the License.
 package cmd
 
 import (
+	"os"
+
 	"github.com/egon12/ghr/app"
 	"github.com/egon12/ghr/testresult"
 	"github.com/spf13/cobra"
@@ -46,7 +48,8 @@ var consumeTestCmd = &cobra.Command{
 		if err != nil {
 			cmd.PrintErr(err)
 		}
-
+		// so it will failed in jenkins
+		os.Exit(2)
 	},
 }
 

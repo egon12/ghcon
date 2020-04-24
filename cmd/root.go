@@ -83,6 +83,9 @@ func initConfig() {
 
 	viper.AutomaticEnv() // read in environment variables that match
 
+	viper.BindEnv("GITHUBTOKEN")
+	viper.SetDefault("GITHUBTOKEN", "nothing")
+
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())

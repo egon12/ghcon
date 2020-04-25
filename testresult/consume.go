@@ -74,7 +74,8 @@ func ReadStdOut(outPath string) (haveError bool, content string, err error) {
 			continue
 		}
 
-		panic(string(oc[i:len(oc)]))
+		// what to do with this line, for now ignore it
+		i = skipUntilNewline(oc, i)
 	}
 
 	if len(content) > 0 {

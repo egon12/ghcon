@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/egon12/ghr/commit"
+	"github.com/egon12/ghr/coverreview"
 	"github.com/egon12/ghr/review"
 	"github.com/google/go-github/v31/github"
 	"github.com/google/wire"
@@ -21,8 +22,9 @@ var set = wire.NewSet(
 	review.NewMultilineCommenter,
 	review.NewProcessFacade,
 	commit.NewSource,
+	coverreview.NewCoverageReviewer,
 	wire.Bind(new(review.CommitSource), new(*commit.Source)),
-	wire.Struct(new(App), "ReviewProcess"),
+	wire.Struct(new(App), "ReviewProcess", "CoverageReviewer"),
 )
 
 type GithubToken string

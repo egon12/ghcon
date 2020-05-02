@@ -6,6 +6,7 @@ import (
 
 func TestCoverageReviewer_Do(t *testing.T) {
 	r := coverageReviewer{
+		nil,
 		&mockMultilineCommenter{},
 	}
 
@@ -18,6 +19,7 @@ func TestCoverageReviewer_Do(t *testing.T) {
 
 func TestCoverageReviewer_DoReview(t *testing.T) {
 	r := coverageReviewer{
+		nil,
 		&mockMultilineCommenter{},
 	}
 

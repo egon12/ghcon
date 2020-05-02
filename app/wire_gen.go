@@ -7,6 +7,7 @@ package app
 
 import (
 	"github.com/egon12/ghr/commit"
+	"github.com/egon12/ghr/coverreview"
 	"github.com/egon12/ghr/review"
 	"github.com/google/go-github/v31/github"
 	"github.com/shurcooL/githubv4"
@@ -24,8 +25,10 @@ func InitApp(config Config) *App {
 	multilineCommenter := review.NewMultilineCommenter(githubClient)
 	source := commit.NewSource(githubv4Client)
 	processFacade := review.NewProcessFacade(process, multilineCommenter, source)
+	coverageReviewer := coverreview.NewCoverageReviewer(source, multilineCommenter)
 	app := &App{
-		ReviewProcess: processFacade,
+		ReviewProcess:    processFacade,
+		CoverageReviewer: coverageReviewer,
 	}
 	return app
 }

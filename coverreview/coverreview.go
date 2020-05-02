@@ -8,7 +8,16 @@ import (
 	"github.com/egon12/ghr/review"
 )
 
+type CoverageReviewer interface {
+	Read(coverProfilePath string) error
+}
+
+func NewCoverageReviewer(cs *commit.Source, mc review.MultilineCommenter) CoverageReviewer {
+	return &coverageReviewer{cs, mc}
+}
+
 type coverageReviewer struct {
+	commitSource       *commit.Source
 	multilineCommenter review.MultilineCommenter
 }
 
@@ -16,6 +25,15 @@ type CoverProfile struct {
 	file       string
 	percentage float32
 	ranges     []coverage.Range
+}
+
+func (c *coverageReviewer) Read(coverProfilePath string) error {
+	commit := c.commitSource.GetCurrentCommit()
+	if commit.Error() != nil {
+		return commit.Error()
+	}
+
+	return c.Do(commit, coverProfilePath)
 }
 
 func (c *coverageReviewer) Do(com commit.Commit, coverProfilePath string) error {

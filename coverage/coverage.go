@@ -3,6 +3,8 @@ package coverage
 import (
 	"path"
 
+	epath "github.com/egon12/ghr/path"
+
 	"golang.org/x/tools/cover"
 )
 
@@ -69,11 +71,16 @@ func (g *goCoverageInGit) PercentageFile(fileName string) float32 {
 func (g *goCoverageInGit) NotInCoverageLines(fileName string) []Range {
 	var result []Range
 
+	f, err := epath.GetFileWithPackagePath(fileName)
+	if err != nil {
+		return result
+	}
+
 	for _, p := range g.profiles {
-		if p.FileName == fileName {
+		if p.FileName == f {
 			for _, b := range p.Blocks {
-				if b.Count == 0 {
-					return nil
+				if b.Count != 0 {
+					continue
 				}
 				r := Range{
 					From: b.StartLine,

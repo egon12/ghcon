@@ -7,7 +7,8 @@ func FromCommit(commit Commit) ListChanges {
 		panic(err)
 	}
 	return &listChanges{
-		files: files,
+		files:  files,
+		commit: commit,
 	}
 }
 

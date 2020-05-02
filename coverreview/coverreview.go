@@ -9,7 +9,6 @@ import (
 )
 
 type coverageReviewer struct {
-	gitDiffProducer    diff.GitDiffProducer
 	multilineCommenter review.MultilineCommenter
 }
 
@@ -19,30 +18,34 @@ type CoverProfile struct {
 	ranges     []coverage.Range
 }
 
-func (c *coverageReviewer) Do(commit commit.Commit, coverProfilePath string) error {
+func (c *coverageReviewer) Do(com commit.Commit, coverProfilePath string) error {
 	coverProfiles, err := coverage.FromProfile(coverProfilePath)
 	if err != nil {
 		return err
 	}
 
-	listChanges := diff.FromCommit(commit)
+	listChanges := diff.FromCommit(com)
 	if err != nil {
 		return err
 	}
 
+	return c.DoReview(com, coverProfiles, listChanges)
+}
+
+func (c *coverageReviewer) DoReview(com commit.Commit, cv coverage.GoCoverageInGit, l diff.ListChanges) error {
 	var filteredCoverProfile []CoverProfile
-	for _, f := range listChanges.Files() {
-		percent := coverProfiles.PercentageFile(f)
+	for _, f := range l.Files() {
+		percent := cv.PercentageFile(f)
 		if percent < 1 {
 			filteredCoverProfile = append(filteredCoverProfile, CoverProfile{
 				file:       f,
 				percentage: percent,
-				ranges:     coverProfiles.NotInCoverageLines(f),
+				ranges:     cv.NotInCoverageLines(f),
 			})
 		}
 	}
 
-	return c.AddCoverageReview(commit, filteredCoverProfile)
+	return c.AddCoverageReview(com, filteredCoverProfile)
 }
 
 func (c *coverageReviewer) AddCoverageReview(commit commit.Commit, coverProfile []CoverProfile) error {

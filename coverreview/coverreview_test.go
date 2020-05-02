@@ -2,19 +2,30 @@ package coverreview
 
 import (
 	"testing"
-
-	"github.com/egon12/ghr/commit"
 )
 
+func TestCoverageReviewer_Do(t *testing.T) {
+	r := coverageReviewer{
+		&mockMultilineCommenter{},
+	}
+
+	err := r.Do(nil, "")
+	if err == nil {
+		t.Error(err)
+	}
+	// TODO take out ListChanges Producer from this coverageReviewer
+}
+
+func TestCoverageReviewer_DoReview(t *testing.T) {
+	r := coverageReviewer{
+		&mockMultilineCommenter{},
+	}
+
+	err := r.DoReview(nil, &mockCoverage{}, &mockListChanges{})
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestAddSingleCoverageReview(t *testing.T) {
-}
-
-type mockMultilineCommenter struct{}
-
-func (m *mockMultilineCommenter) Start(_ commit.Commit) error {
-	panic("not implemented") // TODO: Implement
-}
-
-func (m *mockMultilineCommenter) AddComment(path string, from int, to int, comment string) error {
-	panic("not implemented") // TODO: Implement
 }

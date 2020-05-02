@@ -4,5 +4,7 @@ import "testing"
 
 func TestRead(t *testing.T) {
 	a, _ := Read("full")
-	t.Errorf("%+v", a)
+	if len(a) != 10 {
+		t.Errorf("Want 10 lint error got %d", len(a))
+	}
 }

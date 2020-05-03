@@ -8,10 +8,12 @@ import (
 	"github.com/egon12/ghr/review"
 )
 
+// CoverageReviewer will report lines that not coverage in test
 type CoverageReviewer interface {
 	Read(coverProfilePath string) error
 }
 
+// NewCoverageReviewer create new CoverageReview
 func NewCoverageReviewer(cs *commit.Source, mc review.MultilineCommenter) CoverageReviewer {
 	return &coverageReviewer{cs, mc}
 }
@@ -21,7 +23,7 @@ type coverageReviewer struct {
 	multilineCommenter review.MultilineCommenter
 }
 
-type CoverProfile struct {
+type coverProfile struct {
 	file       string
 	percentage float32
 	ranges     []coverage.Range
@@ -51,14 +53,16 @@ func (c *coverageReviewer) Do(com commit.Commit, coverProfilePath string) error 
 }
 
 func (c *coverageReviewer) DoReview(com commit.Commit, cv coverage.GoCoverageInGit, l diff.ListChanges) error {
-	var filteredCoverProfile []CoverProfile
+	var filteredCoverProfile []coverProfile
 	for _, f := range l.Files() {
 		percent := cv.PercentageFile(f)
 		if percent < 1 {
-			filteredCoverProfile = append(filteredCoverProfile, CoverProfile{
+			ranges := cv.NotInCoverageLines(f)
+			ranges = CombineRanges(ranges)
+			filteredCoverProfile = append(filteredCoverProfile, coverProfile{
 				file:       f,
 				percentage: percent,
-				ranges:     cv.NotInCoverageLines(f),
+				ranges:     ranges,
 			})
 		}
 	}
@@ -66,7 +70,7 @@ func (c *coverageReviewer) DoReview(com commit.Commit, cv coverage.GoCoverageInG
 	return c.AddCoverageReview(com, filteredCoverProfile)
 }
 
-func (c *coverageReviewer) AddCoverageReview(commit commit.Commit, coverProfile []CoverProfile) error {
+func (c *coverageReviewer) AddCoverageReview(commit commit.Commit, coverProfile []coverProfile) error {
 	c.multilineCommenter.Start(commit)
 	for _, cp := range coverProfile {
 		err := c.AddSingleFileCoverageReview(cp)
@@ -77,7 +81,8 @@ func (c *coverageReviewer) AddCoverageReview(commit commit.Commit, coverProfile 
 	return nil
 }
 
-func (c *coverageReviewer) AddSingleFileCoverageReview(cp CoverProfile) error {
+func (c *coverageReviewer) AddSingleFileCoverageReview(cp coverProfile) error {
+	if cp.percentage
 	for _, r := range cp.ranges {
 		err := c.AddSingleCoverageReview(cp.file, r)
 		if err != nil {

@@ -33,6 +33,10 @@ func (r *multilineCommenter) AddComment(filePath string, fromLineNumber, toLineN
 		return fmt.Errorf("Get GitPath error %v", err)
 	}
 
+	if fromLineNumber == toLineNumber {
+		toLineNumber += 1
+	}
+
 	pullRequestComment := github.PullRequestComment{
 		Body:      &comment,
 		Path:      &gitFilePath,

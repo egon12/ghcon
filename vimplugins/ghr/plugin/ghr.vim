@@ -5,9 +5,15 @@ function! ghr#comment(msg)
 endfunction
 
 function! ghr#finish(msg)
-	echom system('echo "' . a:msg . '"')
+	echom system('ghr finish "' . a:msg . '"')
+endfunction
+
+function! ghr#cancel()
+	echom system('ghr cancel')
 endfunction
 
 command -nargs=1 GHRComment call ghr#comment(<args>)
 
 command -nargs=1 GHRFinish call ghr#finish(<args>)
+
+command -nargs=0 GHRCancel call ghr#cancel()

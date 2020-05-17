@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-github/v31/github"
 )
 
-type multilineCommenter struct {
+type ultilineCommenter struct {
 	commit   commit.Commit
 	clientV3 *github.Client
 }

@@ -27,3 +27,14 @@ func GetFullPackageName(path string) (string, error) {
 
 	return rel, nil
 }
+
+func GetFileWithPackagePath(f string) (string, error) {
+
+	pkgname, err := GetFullPackageName(f)
+	if err != nil {
+		return "", err
+	}
+
+	return pkgname + "/" + filepath.Base(f), nil
+
+}

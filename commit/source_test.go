@@ -23,6 +23,7 @@ func TestGetGithubRepo(t *testing.T) {
 }
 
 func TestGetCommitFromRepo(t *testing.T) {
+	t.Skip("Need GITHUB_TOKEN")
 	repo := "egon12/ghr"
 	hash := "cfa9a97b93a300785746b692f6a0de4e7b18aa70"
 

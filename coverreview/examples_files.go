@@ -1,3 +1,0 @@
-package coverreview
-
-func Test() {}

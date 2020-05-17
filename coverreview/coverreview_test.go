@@ -2,27 +2,44 @@ package coverreview
 
 import (
 	"testing"
-
-	"github.com/egon12/ghr/commit"
-	"github.com/egon12/ghr/cover"
 )
 
-func TestAddSingleCoverageReview(t *testing.T) {
-	c := &coverageReviewer{}
-	c.multilineCommenter = &mockMultilineCommenter{}
-	nics, _ := cover.GetNotCoverage("cover.out")
-	l := c.filterNotInCoverage(nics, []string{"coverreview/coverreview.go"})
-	for _, i := range l {
-		t.Log(i)
+func TestCoverageReviewer_Do(t *testing.T) {
+	r := coverageReviewer{
+		nil,
+		&mockMultilineCommenter{},
+		nil,
+		0.7,
+	}
+
+	err := r.Do(nil, "")
+	if err == nil {
+		t.Error(err)
+	}
+	// TODO take out ListChanges Producer from this coverageReviewer
+}
+
+func TestCoverageReviewer_DoReview(t *testing.T) {
+	r := coverageReviewer{
+		nil,
+		&mockMultilineCommenter{},
+		nil,
+		0.7,
+	}
+
+	err := r.DoReview(nil, &mockCoverage{}, &mockListChanges{})
+	if err != nil {
+		t.Error(err)
 	}
 }
 
-type mockMultilineCommenter struct{}
+// Ok, now how we will ad this one?
+//go:generate mockery -name ReviewProcess -case snake -testonly -inpkg -keeptree
+func TestCoverageReviewer_AddCoverageReview(t *testing.T) {
+	/*
+		rp := mocks.ReviewProcess{}
+		rp.On("Start", "any")
 
-func (m *mockMultilineCommenter) Start(_ commit.Commit) error {
-	panic("not implemented") // TODO: Implement
-}
-
-func (m *mockMultilineCommenter) AddComment(path string, from int, to int, comment string) error {
-	panic("not implemented") // TODO: Implement
+		coverageReviewer{nil, nil, rp, 0.7}
+	*/
 }

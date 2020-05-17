@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/egon12/ghr/commit"
+	"github.com/egon12/ghr/githubcommit"
 	"github.com/google/go-github/v31/github"
 	"github.com/joho/godotenv"
 	"github.com/shurcooL/githubv4"
@@ -34,7 +34,7 @@ func TestReviewProcess_StartAddCommentFinish(t *testing.T) {
 	t.Skip()
 	hash := "cfa9a97b93a300785746b692f6a0de4e7b18aa70"
 	clientV4 := getClient()
-	cs := commit.NewSource(clientV4)
+	cs := githubcommit.NewSource(clientV4)
 	r := &process{clientV4: clientV4}
 
 	err := r.Start(cs.GetCommit(hash))
@@ -57,7 +57,7 @@ func TestReviewProcess_StartReview(t *testing.T) {
 	t.Skip()
 	hash := "cfa9a97b93a300785746b692f6a0de4e7b18aa70"
 	clientV4 := getClient()
-	cs := commit.NewSource(clientV4)
+	cs := githubcommit.NewSource(clientV4)
 	r := &process{clientV4: clientV4}
 
 	err := r.Start(

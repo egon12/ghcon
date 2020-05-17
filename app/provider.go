@@ -3,8 +3,8 @@ package app
 import (
 	"net/http"
 
-	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/coverreview"
+	"github.com/egon12/ghr/githubcommit"
 	"github.com/egon12/ghr/review"
 	"github.com/google/go-github/v31/github"
 	"github.com/google/wire"
@@ -21,9 +21,9 @@ var set = wire.NewSet(
 	review.NewProcess,
 	review.NewMultilineCommenter,
 	review.NewProcessFacade,
-	commit.NewSource,
+	githubcommit.NewSource,
 	coverreview.NewCoverageReviewer,
-	wire.Bind(new(review.CommitSource), new(*commit.Source)),
+	wire.Bind(new(review.CommitSource), new(*githubcommit.Source)),
 	wire.Struct(new(App), "ReviewProcess", "CoverageReviewer"),
 )
 

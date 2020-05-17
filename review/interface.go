@@ -1,9 +1,9 @@
 package review
 
-import "github.com/egon12/ghr/commit"
+import "github.com/egon12/ghr/githubcommit"
 
 type Process interface {
-	Start(commit.Commit) error
+	Start(githubcommit.Commit) error
 	AddComment(path string, lineNumber int, comment string) error
 	Cancel() error
 	Finish(comment string) error
@@ -12,12 +12,12 @@ type Process interface {
 }
 
 type MultilineCommenter interface {
-	Start(commit.Commit) error
+	Start(githubcommit.Commit) error
 	AddComment(path string, from, to int, comment string) error
 }
 
 type CommitSource interface {
-	GetCurrentCommit() commit.Commit
+	GetCurrentCommit() githubcommit.Commit
 }
 
 type ProcessFacade interface {

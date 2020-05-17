@@ -1,9 +1,9 @@
 package lintreview
 
 import (
-	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/diff"
 	"github.com/egon12/ghr/filter"
+	"github.com/egon12/ghr/githubcommit"
 	"github.com/egon12/ghr/lintresult"
 	"github.com/egon12/ghr/path"
 	"github.com/egon12/ghr/review"
@@ -17,7 +17,7 @@ func NewLintReviewer(process review.Process) *LintReviewer {
 	return &LintReviewer{process}
 }
 
-func (lr *LintReviewer) ReadAndReview(lintResultFile string, c commit.Commit) ([]lintresult.LintResult, error) {
+func (lr *LintReviewer) ReadAndReview(lintResultFile string, c githubcommit.Commit) ([]lintresult.LintResult, error) {
 	lintResult, err := lintresult.Read(lintResultFile)
 	if err != nil {
 		return nil, err

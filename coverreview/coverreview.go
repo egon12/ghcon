@@ -16,9 +16,9 @@ package coverreview
 //
 
 import (
-	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/coverage"
 	"github.com/egon12/ghr/diff"
+	"github.com/egon12/ghr/githubcommit"
 	"github.com/egon12/ghr/path"
 	"github.com/egon12/ghr/review"
 )
@@ -29,12 +29,12 @@ type CoverageReviewer interface {
 }
 
 // NewCoverageReviewer create new CoverageReview
-func NewCoverageReviewer(cs *commit.Source, mc review.MultilineCommenter, rp review.Process) CoverageReviewer {
+func NewCoverageReviewer(cs *githubcommit.Source, mc review.MultilineCommenter, rp review.Process) CoverageReviewer {
 	return &coverageReviewer{cs, mc, rp, 0.7}
 }
 
 type coverageReviewer struct {
-	commitSource       *commit.Source
+	commitSource       *githubcommit.Source
 	multilineCommenter review.MultilineCommenter
 	reviewProcess      ReviewProcess
 	minimumForComment  float32
@@ -55,7 +55,7 @@ func (c *coverageReviewer) Read(coverProfilePath string) error {
 	return c.Do(commit, coverProfilePath)
 }
 
-func (c *coverageReviewer) Do(com commit.Commit, coverProfilePath string) error {
+func (c *coverageReviewer) Do(com githubcommit.Commit, coverProfilePath string) error {
 	coverProfiles, err := coverage.FromProfile(coverProfilePath)
 	if err != nil {
 		return err
@@ -69,7 +69,7 @@ func (c *coverageReviewer) Do(com commit.Commit, coverProfilePath string) error 
 	return c.DoReview(com, coverProfiles, listChanges)
 }
 
-func (c *coverageReviewer) DoReview(com commit.Commit, cv coverage.GoCoverageInGit, l diff.ListChanges) error {
+func (c *coverageReviewer) DoReview(com githubcommit.Commit, cv coverage.GoCoverageInGit, l diff.ListChanges) error {
 	var filteredCoverProfile []coverProfile
 	for _, f := range l.Files() {
 		percent := cv.PercentageFile(f)
@@ -88,7 +88,7 @@ func (c *coverageReviewer) DoReview(com commit.Commit, cv coverage.GoCoverageInG
 }
 
 // AddCoverageReview will add review about coverage
-func (c *coverageReviewer) AddCoverageReview(commit commit.Commit, coverProfile []coverProfile) error {
+func (c *coverageReviewer) AddCoverageReview(commit githubcommit.Commit, coverProfile []coverProfile) error {
 	c.multilineCommenter.Start(commit)
 	for _, cp := range coverProfile {
 		err := c.AddSingleFileCoverageReview(cp)

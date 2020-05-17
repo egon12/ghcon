@@ -3,7 +3,7 @@ package review
 import (
 	"fmt"
 
-	"github.com/egon12/ghr/commit"
+	"github.com/egon12/ghr/githubcommit"
 	"github.com/egon12/ghr/path"
 )
 
@@ -52,7 +52,7 @@ func (p *processFacade) reviewComment(path string, lineNumber int, comment strin
 func (p *processFacade) reviewMultilineComment(path string, fromLineNumber, toLineNumber int, comment string) error {
 	var (
 		err    error
-		commit commit.Commit
+		commit githubcommit.Commit
 	)
 
 	commit = p.source.GetCurrentCommit()
@@ -111,7 +111,7 @@ func (p *processFacade) RequestChanges(lastComment string) error {
 func (p *processFacade) start() error {
 	var (
 		err    error
-		commit commit.Commit
+		commit githubcommit.Commit
 	)
 
 	commit = p.source.GetCurrentCommit()

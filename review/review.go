@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/diff"
+	"github.com/egon12/ghr/githubcommit"
 	"github.com/egon12/ghr/path"
 	"github.com/shurcooL/githubv4"
 )
@@ -16,11 +16,11 @@ func NewProcess(clientV4 *githubv4.Client) Process {
 
 type process struct {
 	clientV4            *githubv4.Client
-	commit              commit.Commit
+	commit              githubcommit.Commit
 	pullRequestReviewID string
 }
 
-func (r *process) Start(commit commit.Commit) error {
+func (r *process) Start(commit githubcommit.Commit) error {
 	r.commit = commit
 	ok, err := r.continueReview(commit)
 	if err != nil {
@@ -32,7 +32,7 @@ func (r *process) Start(commit commit.Commit) error {
 	return nil
 }
 
-func (r *process) continueReview(commit commit.Commit) (bool, error) {
+func (r *process) continueReview(commit githubcommit.Commit) (bool, error) {
 	var query struct {
 		Repository struct {
 			PullRequest struct {
@@ -63,7 +63,7 @@ func (r *process) continueReview(commit commit.Commit) (bool, error) {
 	return ok, err
 }
 
-func (r *process) startReview(commit commit.Commit) error {
+func (r *process) startReview(commit githubcommit.Commit) error {
 	var mutation struct {
 		AddPullRequestReview struct {
 			PullRequestReview struct {

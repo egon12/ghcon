@@ -1,16 +1,16 @@
 package coverreview
 
 import (
-	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/coverage"
 	"github.com/egon12/ghr/diff"
+	"github.com/egon12/ghr/githubcommit"
 )
 
 type mockMultilineCommenter struct {
-	commit commit.Commit
+	commit githubcommit.Commit
 }
 
-func (m *mockMultilineCommenter) Start(c commit.Commit) error {
+func (m *mockMultilineCommenter) Start(c githubcommit.Commit) error {
 	m.commit = c
 	return nil
 }
@@ -56,7 +56,7 @@ func (m *mockListChanges) RangesInOri(filename string) []diff.Range {
 type mockReviewProcess struct {
 }
 
-func (m *mockReviewProcess) Start(_ commit.Commit) error {
+func (m *mockReviewProcess) Start(_ githubcommit.Commit) error {
 	panic("not implemented") // TODO: Implement
 }
 

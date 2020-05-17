@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/egon12/ghr/commit"
+	"github.com/egon12/ghr/githubcommit"
 	"github.com/egon12/ghr/path"
 	"github.com/google/go-github/v31/github"
 )
 
 type multilineCommenter struct {
-	commit   commit.Commit
+	commit   githubcommit.Commit
 	clientV3 *github.Client
 }
 
@@ -18,7 +18,7 @@ func NewMultilineCommenter(clientV3 *github.Client) MultilineCommenter {
 	return &multilineCommenter{clientV3: clientV3}
 }
 
-func (r *multilineCommenter) Start(commit commit.Commit) error {
+func (r *multilineCommenter) Start(commit githubcommit.Commit) error {
 	r.commit = commit
 	return nil
 }

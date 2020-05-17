@@ -1,4 +1,4 @@
-package commit
+package githubcommit
 
 type Commit interface {
 	GetRepo() string

@@ -1,5 +1,20 @@
 package coverreview
 
+// pacakge coverreview
+//
+// This package will add review about coverage
+// While there are too many options for now..
+// What are the options?:
+//
+// # Comment all in the source
+// Disadvantages:
+// * To many comment
+//
+// # Just show summary in comment
+// Disadvantages:
+// * Just will be some report that wouldn't be read
+//
+
 import (
 	"github.com/egon12/ghr/commit"
 	"github.com/egon12/ghr/coverage"
@@ -14,13 +29,15 @@ type CoverageReviewer interface {
 }
 
 // NewCoverageReviewer create new CoverageReview
-func NewCoverageReviewer(cs *commit.Source, mc review.MultilineCommenter) CoverageReviewer {
-	return &coverageReviewer{cs, mc}
+func NewCoverageReviewer(cs *commit.Source, mc review.MultilineCommenter, rp review.Process) CoverageReviewer {
+	return &coverageReviewer{cs, mc, rp, 0.7}
 }
 
 type coverageReviewer struct {
 	commitSource       *commit.Source
 	multilineCommenter review.MultilineCommenter
+	reviewProcess      ReviewProcess
+	minimumForComment  float32
 }
 
 type coverProfile struct {
@@ -70,6 +87,7 @@ func (c *coverageReviewer) DoReview(com commit.Commit, cv coverage.GoCoverageInG
 	return c.AddCoverageReview(com, filteredCoverProfile)
 }
 
+// AddCoverageReview will add review about coverage
 func (c *coverageReviewer) AddCoverageReview(commit commit.Commit, coverProfile []coverProfile) error {
 	c.multilineCommenter.Start(commit)
 	for _, cp := range coverProfile {
@@ -82,7 +100,6 @@ func (c *coverageReviewer) AddCoverageReview(commit commit.Commit, coverProfile 
 }
 
 func (c *coverageReviewer) AddSingleFileCoverageReview(cp coverProfile) error {
-	if cp.percentage
 	for _, r := range cp.ranges {
 		err := c.AddSingleCoverageReview(cp.file, r)
 		if err != nil {

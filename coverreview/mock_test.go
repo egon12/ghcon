@@ -22,7 +22,7 @@ func (m *mockMultilineCommenter) AddComment(path string, from int, to int, comme
 type mockCoverage struct{}
 
 func (m *mockCoverage) Percentage() float32 {
-	panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement }
 }
 
 func (m *mockCoverage) PercentagePackage(packageName string) float32 {
@@ -50,5 +50,32 @@ func (m *mockListChanges) RangesInNew(filename string) []diff.Range {
 }
 
 func (m *mockListChanges) RangesInOri(filename string) []diff.Range {
+	panic("not implemented") // TODO: Implement
+}
+
+type mockReviewProcess struct {
+}
+
+func (m *mockReviewProcess) Start(_ commit.Commit) error {
+	panic("not implemented") // TODO: Implement
+}
+
+func (m *mockReviewProcess) AddComment(path string, lineNumber int, comment string) error {
+	panic("not implemented") // TODO: Implement
+}
+
+func (m *mockReviewProcess) Cancel() error {
+	panic("not implemented") // TODO: Implement
+}
+
+func (m *mockReviewProcess) Finish(comment string) error {
+	panic("not implemented") // TODO: Implement
+}
+
+func (m *mockReviewProcess) Approve(comment string) error {
+	panic("not implemented") // TODO: Implement
+}
+
+func (m *mockReviewProcess) RequestChanges(comment string) error {
 	panic("not implemented") // TODO: Implement
 }

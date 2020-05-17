@@ -8,6 +8,8 @@ func TestCoverageReviewer_Do(t *testing.T) {
 	r := coverageReviewer{
 		nil,
 		&mockMultilineCommenter{},
+		nil,
+		0.7,
 	}
 
 	err := r.Do(nil, "")
@@ -21,6 +23,8 @@ func TestCoverageReviewer_DoReview(t *testing.T) {
 	r := coverageReviewer{
 		nil,
 		&mockMultilineCommenter{},
+		nil,
+		0.7,
 	}
 
 	err := r.DoReview(nil, &mockCoverage{}, &mockListChanges{})
@@ -29,5 +33,13 @@ func TestCoverageReviewer_DoReview(t *testing.T) {
 	}
 }
 
-func TestAddSingleCoverageReview(t *testing.T) {
+// Ok, now how we will ad this one?
+//go:generate mockery -name ReviewProcess -case snake -testonly -inpkg -keeptree
+func TestCoverageReviewer_AddCoverageReview(t *testing.T) {
+	/*
+		rp := mocks.ReviewProcess{}
+		rp.On("Start", "any")
+
+		coverageReviewer{nil, nil, rp, 0.7}
+	*/
 }

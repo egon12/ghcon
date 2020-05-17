@@ -25,7 +25,7 @@ func InitApp(config Config) *App {
 	multilineCommenter := review.NewMultilineCommenter(githubClient)
 	source := commit.NewSource(githubv4Client)
 	processFacade := review.NewProcessFacade(process, multilineCommenter, source)
-	coverageReviewer := coverreview.NewCoverageReviewer(source, multilineCommenter)
+	coverageReviewer := coverreview.NewCoverageReviewer(source, multilineCommenter, process)
 	app := &App{
 		ReviewProcess:    processFacade,
 		CoverageReviewer: coverageReviewer,

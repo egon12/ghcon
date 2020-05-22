@@ -12,5 +12,7 @@ require (
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/viper v1.6.3
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	golang.org/x/tools v0.0.0-20200323144430-8dcfad9e016e
+	golang.org/x/tools v0.0.0-20200331025713-a30bf2db82d4
+	google.golang.org/api v0.25.0
+	gopkg.in/h2non/gock.v1 v1.0.15
 )

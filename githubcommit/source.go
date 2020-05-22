@@ -2,93 +2,39 @@ package githubcommit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os/exec"
 	"regexp"
-	"strings"
 
 	"github.com/shurcooL/githubv4"
 )
 
-type commit struct {
-	repo         string
-	hash         string
-	err          error
-	isPR         bool
-	prNumbers    []int
-	prID         []string
-	baseRefNames []string
-}
-
-func (c *commit) GetRepo() string {
-	return c.repo
-}
-
-func (c *commit) GetOwner() string {
-	ownerAndRepo := strings.Split(c.repo, "/")
-	return ownerAndRepo[0]
-}
-
-func (c *commit) GetRepoName() string {
-	ownerAndRepo := strings.Split(c.repo, "/")
-	if len(ownerAndRepo) < 2 {
-		return ""
-	}
-	return ownerAndRepo[1]
-}
-
-func (c *commit) GetHash() string {
-	return c.hash
-}
-
-func (c *commit) Error() error {
-	return c.err
-}
-
-func (c *commit) IsPR() bool {
-	return c.isPR
-}
-
-func (c *commit) GetPRNumber() int {
-	if len(c.prNumbers) > 0 {
-		return c.prNumbers[0]
-	}
-	return 0
-}
-
-func (c *commit) GetPRID() string {
-	if len(c.prID) > 0 {
-		return c.prID[0]
-	}
-	return ""
-}
-
-func (c *commit) GetBaseRefName() string {
-	if len(c.baseRefNames) > 0 {
-		return c.baseRefNames[0]
-	}
-	return ""
-}
-
+// Source are commit source, or we can say as commit repository.
 type Source struct {
 	githubClientV4 *githubv4.Client
 }
 
+// NewSource create new commit source.
 func NewSource(client *githubv4.Client) *Source {
 	return &Source{client}
 }
 
+// GetCurrentCommit are get commit data from directory and what you checkout.
 func (c *Source) GetCurrentCommit() Commit {
 	cmd := exec.Command("git", "rev-parse", "HEAD")
+
 	output, err := cmd.Output()
 	if err != nil {
 		return &commit{err: err}
 	}
 
 	hash := string(output[:len(output)-1])
+
 	return c.GetCommit(hash)
 }
 
+// GetCommit are function to get commit data from your directory.
 func (c *Source) GetCommit(hash string) Commit {
 	repo, err := getGithubRepo()
 	if err != nil {
@@ -106,6 +52,7 @@ func (c *Source) GetCommit(hash string) Commit {
 	return c.GetCommitFromRepo(repo, hash)
 }
 
+// GetCommitFromRepo are function to get commit data with repo and hash.
 func (c *Source) GetCommitFromRepo(repo, hash string) Commit {
 	result := commit{repo: repo, hash: hash}
 
@@ -149,26 +96,24 @@ func (c *Source) GetCommitFromRepo(repo, hash string) Commit {
 
 func getGithubRepo() (string, error) {
 	cmd := exec.Command("git", "remote", "-v")
+
 	output, err := cmd.Output()
 	if err != nil {
 		return "", err
 	}
 
 	origin := string(output[:len(output)-1])
-	return getGithubRepoFromOrigin(origin), nil
+
+	return getGithubRepoFromOrigin(origin)
 }
 
-func getGithubRepoFromOrigin(origin string) string {
+func getGithubRepoFromOrigin(origin string) (string, error) {
 	r := regexp.MustCompile(`github.com[:/]([a-zA-Z0-9/_]*)`)
 
-	m := r.FindAllStringSubmatch(origin, 1)
-	if len(m) < 1 {
-		return ""
+	m := r.FindStringSubmatch(origin)
+	if m == nil {
+		return "", errors.New("Can't find github in 'git remote -v'")
 	}
 
-	if len(m[0]) < 2 {
-		return ""
-	}
-
-	return m[0][1]
+	return m[1], nil
 }

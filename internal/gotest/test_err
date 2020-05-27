@@ -1,0 +1,8 @@
+# github.com/egon12/ghr/review [github.com/egon12/ghr/review.test]
+review/multiline_commenter.go:18:10: undefined: multilineCommenter
+review/multiline_commenter.go:21:10: undefined: multilineCommenter
+review/multiline_commenter.go:26:10: undefined: multilineCommenter
+# github.com/egon12/ghr/review
+review/multiline_commenter.go:18:10: undefined: multilineCommenter
+review/multiline_commenter.go:21:10: undefined: multilineCommenter
+review/multiline_commenter.go:26:10: undefined: multilineCommenter

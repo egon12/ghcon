@@ -25,23 +25,17 @@ type (
 
 	Review struct {
 		State
+		Message  string
 		Comments []Comment
 	}
 
-	CommentType int
+	Source string
 
 	Comment struct {
-		CommentType
-		State
-		Source  string
+		Source
 		Side    string
 		Message string
 	}
-)
-
-const (
-	CommentWithSource CommentType = iota + 1
-	CommentWithState
 )
 
 const (
@@ -61,12 +55,15 @@ type (
 	Reviewer interface {
 		Start(PR, Commit) error
 		Comment(Comment) error
-		Finish(Comment) error
+		Finish(State, string) error
 		Cancel() error
+
+		// Maybe later Do Start, Comment, Finish
+		//Review(Review) error
 	}
 
 	Generator interface {
-		Generate(stdout, stderr io.Reader, returnCode int) ([]Comment, error)
+		Generate(stdout, stderr io.Reader, returnCode int) (*Review, error)
 	}
 
 	Executor interface {

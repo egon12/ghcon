@@ -13,16 +13,16 @@ func TestGenerator_Generate(t *testing.T) {
 
 	stdout, stderr, _ := executor.Run(reviewing.PR{})
 
-	comments, err := tg.Generate(stdout, stderr, 0)
+	review, err := tg.Generate(stdout, stderr, 0)
 	if err != nil {
 		t.Error(err)
 	}
 
-	if len(comments) != 1 {
-		t.Error("It should only show one comment")
+	if review == nil {
+		t.Error("It should have a review")
 	}
 
-	if comments[0].State != reviewing.Reject {
+	if review.State != reviewing.Reject {
 		t.Error("It should reject / request changes")
 	}
 }
@@ -50,11 +50,11 @@ func TestGenerate_Generate_TableTest(t *testing.T) {
 
 			comments, _ := tg.Generate(stdout, stderr, 0)
 			if tt.messageOutLen == 0 {
-				if len(comments) != 0 {
-					t.Error("Want 0 comments")
+				if comments != nil {
+					t.Errorf("Want 0 comments got %#v", comments)
 				}
-			} else if len(comments[0].Message) != tt.messageOutLen {
-				t.Errorf("Diff len %d", len(comments[0].Message))
+			} else if len(comments.Message) != tt.messageOutLen {
+				t.Errorf("Diff len %d", len(comments.Message))
 			}
 		})
 	}

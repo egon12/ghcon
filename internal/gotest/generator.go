@@ -20,32 +20,30 @@ func NewGenerator() *Generator {
 	return &Generator{}
 }
 
-func (t *Generator) Generate(stdout, stderr io.Reader, exitCode int) ([]reviewing.Comment, error) {
-	var result []reviewing.Comment
+func (t *Generator) Generate(stdout, stderr io.Reader, exitCode int) (*reviewing.Review, error) {
+	var result reviewing.Review
 
 	b, _ := ioutil.ReadAll(stderr)
 	if len(b) > 0 {
-		result = append(result, reviewing.Comment{
-			CommentType: reviewing.CommentWithState,
-			State:       reviewing.Reject,
-			Message:     "Test Build Error:\n```\n" + string(b) + "\n```\n",
-		})
-		return result, nil
+		result = reviewing.Review{
+			State:   reviewing.Reject,
+			Message: "Test Build Error:\n```\n" + string(b) + "\n```\n",
+		}
+		return &result, nil
 	}
 
 	haveError, content, err := readStdOut(stdout)
 	if err != nil {
-		return result, nil
+		return &result, nil
 	}
 
 	if haveError {
-		result = append(result, reviewing.Comment{
-			CommentType: reviewing.CommentWithState,
-			State:       reviewing.Reject,
-			Message:     content,
-		})
-		return result, nil
+		result = reviewing.Review{
+			State:   reviewing.Reject,
+			Message: content,
+		}
+		return &result, nil
 	}
 
-	return result, nil
+	return nil, nil
 }

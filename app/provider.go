@@ -34,5 +34,9 @@ func ProvideOauthTokenSource(githubToken GithubToken) oauth2.TokenSource {
 }
 
 func ProvideOauthClient(ts oauth2.TokenSource) *http.Client {
-	return oauth2.NewClient(oauth2.NoContext, ts)
+
+	return oauth2.NewClient(
+		oauth2.NoContext,
+		ts,
+	)
 }
